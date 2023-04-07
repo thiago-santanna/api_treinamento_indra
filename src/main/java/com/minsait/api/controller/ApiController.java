@@ -85,25 +85,4 @@ public class ApiController{
 
 		return new ResponseEntity<>(clienteResponse, HttpStatus.OK);
 	}
-
-	private Specification<ClienteEntity> clienteEntitySpecification(ClienteEntity clienteEntity) {
-
-		return (root, query, criteriaBuilder) -> {
-
-			List<Predicate> predicates = new ArrayList<>();
-
-			if (clienteEntity.getNome() != null) {
-
-				predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")),
-						"%" + clienteEntity.getNome().trim().toLowerCase() + "%"));
-			}
-
-			if (clienteEntity.getEndereco() != null) {
-
-				predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("endereco")),
-						"%" + clienteEntity.getEndereco().trim().toLowerCase() + "%"));
-			}
-			return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-		};
-	}
 }
