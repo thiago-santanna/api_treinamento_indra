@@ -20,3 +20,13 @@ spring:
     show-sql: true
     properties:
       hibernate: org.hibernate.dialect.Oracle10gDialect
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+        SQL: DEBUG

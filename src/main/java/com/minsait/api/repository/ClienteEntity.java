@@ -3,8 +3,12 @@ package com.minsait.api.repository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.*;
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "CLIENTE", schema = "API")
@@ -30,4 +34,25 @@ public class ClienteEntity {
 
     @Column(name = "TELEFONE", nullable = false, length = 100)
     private String telefone;
+
+    public Specification<ClienteEntity> clienteEntitySpecification(ClienteEntity clienteEntity) {
+
+        return (root, query, criteriaBuilder) -> {
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (clienteEntity.getNome() != null) {
+
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("nome")),
+                        "%" + clienteEntity.getNome().trim().toLowerCase() + "%"));
+            }
+
+            if (clienteEntity.getEndereco() != null) {
+
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("endereco")),
+                        "%" + clienteEntity.getEndereco().trim().toLowerCase() + "%"));
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
 }

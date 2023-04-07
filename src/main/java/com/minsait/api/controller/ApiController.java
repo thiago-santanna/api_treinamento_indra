@@ -8,6 +8,9 @@ import com.minsait.api.repository.ClienteRepository;
 import com.minsait.api.util.ObjectMapperUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +30,17 @@ public class ApiController{
 	private ClienteRepository clienteRepository;
 
 	@GetMapping("/cliente")
-	public ResponseEntity<List<ClienteResponse>> clienteFindAll() {
-		final var clienteEntityList = clienteRepository.findAll();
-		final var clienteResponseList = ObjectMapperUtil.mapAll(clienteEntityList, ClienteResponse.class);
+	public ResponseEntity<Page<ClienteResponse>> clienteFindAll(@RequestParam(required = false) String nome,
+																@RequestParam(required = false) String endereco,
+																@RequestParam(required = false, defaultValue = "0") int page,
+																@RequestParam(required = false, defaultValue = "10") int pageSize) {
+		final var clienteEntity = new ClienteEntity();
+		clienteEntity.setEndereco(endereco);
+		clienteEntity.setNome(nome);
+		Pageable pageable = PageRequest.of(page, pageSize);
+
+		final Page<ClienteEntity> clienteEntityListPage = clienteRepository.findAll(clienteEntity.clienteEntitySpecification(clienteEntity), pageable);
+		final  Page<ClienteResponse> clienteResponseList = ObjectMapperUtil.mapAll(clienteEntityListPage, ClienteResponse.class);
 		return ResponseEntity.ok(clienteResponseList);
 	}
 
