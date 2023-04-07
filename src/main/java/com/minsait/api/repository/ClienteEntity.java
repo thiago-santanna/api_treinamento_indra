@@ -35,22 +35,22 @@ public class ClienteEntity {
     @Column(name = "TELEFONE", nullable = false, length = 100)
     private String telefone;
 
-    public Specification<ClienteEntity> clienteEntitySpecification(ClienteEntity clienteEntity) {
+    public Specification<ClienteEntity> clienteEntitySpecification() {
 
         return (root, query, criteriaBuilder) -> {
 
             List<Predicate> predicates = new ArrayList<>();
 
-            if (clienteEntity.getNome() != null) {
+            if (this.getNome() != null) {
 
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("nome")),
-                        "%" + clienteEntity.getNome().trim().toLowerCase() + "%"));
+                        "%" + this.getNome().trim().toLowerCase() + "%"));
             }
 
-            if (clienteEntity.getEndereco() != null) {
+            if (this.getEndereco() != null) {
 
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("endereco")),
-                        "%" + clienteEntity.getEndereco().trim().toLowerCase() + "%"));
+                        "%" + this.getEndereco().trim().toLowerCase() + "%"));
             }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
