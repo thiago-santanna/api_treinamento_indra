@@ -1,0 +1,22 @@
+server:
+  port: 8053
+spring:
+  application:
+    name: api
+  profiles:
+    active: develop
+  flyway:
+    url: jdbc:h2:mem:api;Mode=Oracle;DB_CLOSE_DELAY=-1
+    schemas: PUBLIC
+    user: sa
+    password:
+  datasource:
+    url: jdbc:h2:mem:api;Mode=Oracle
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate: org.hibernate.dialect.Oracle10gDialect
