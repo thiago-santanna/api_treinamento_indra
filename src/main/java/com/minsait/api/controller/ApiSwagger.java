@@ -17,6 +17,7 @@ public interface ApiSwagger {
                     @ApiResponse(responseCode = "200", description = "Dados do cliente retornados com sucesso"),
                     @ApiResponse(responseCode = "400", description = "Parâmetros inválidos"),
                     @ApiResponse(responseCode = "500", description = "Erro interno"),
+                    @ApiResponse(responseCode = "403", description = "Acesso negado"),
                 }
     )
     public ResponseEntity<Page<ClienteResponse>> clienteFindAll(String nome, String endereco, int page, int pagesize);
@@ -26,6 +27,7 @@ public interface ApiSwagger {
             @ApiResponse(responseCode = "200", description = "Cliente inserido com sucesso"),
             @ApiResponse(responseCode = "400", description = "Parâmetros inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro interno"),
+            @ApiResponse(responseCode = "403", description = "Acesso negado"),
         }
     )
     public ResponseEntity<ClienteResponse> insert(ClienteRequest request);
@@ -35,6 +37,7 @@ public interface ApiSwagger {
             @ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Parâmetros inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro interno"),
+            @ApiResponse(responseCode = "403", description = "Acesso negado"),
         }
     )
     public ResponseEntity<ClienteResponse> update(ClienteRequest request);
@@ -45,6 +48,7 @@ public interface ApiSwagger {
             @ApiResponse(responseCode = "400", description = "Parâmetros inválidos"),
             @ApiResponse(responseCode = "404", description = "Cliente não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno"),
+            @ApiResponse(responseCode = "403", description = "Acesso negado"),
         }
     )
     public ResponseEntity<MessageResponse> delete(Long id);
@@ -55,6 +59,7 @@ public interface ApiSwagger {
             @ApiResponse(responseCode = "400", description = "Parâmetros inválidos"),
             @ApiResponse(responseCode = "404", description = "Cliente não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno"),
+            @ApiResponse(responseCode = "403", description = "Acesso negado"),
         }
     )
     public ResponseEntity<ClienteResponse> findById(Long id);

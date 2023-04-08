@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.minsait.api.controller.dto.ClienteRequest;
 import com.minsait.api.repository.ClienteRepository;
+import com.minsait.api.sicurity.util.JWTUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
+
 @DisplayName("Teste endpoints API")
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -30,18 +33,27 @@ class ApiControllerTest {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    JWTUtil jwtUtil;
+
+    private String token;
     private ObjectWriter ow;
-    private static final ObjectMapper MAPPER = new ObjectMapper();;
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @BeforeEach
     public void init(){
         ow = MAPPER.writer().withDefaultPrettyPrinter();
+        ArrayList<String> authorities = new ArrayList<>();
+        authorities.add("LEITURA_CLIENTE");
+        authorities.add("ESCRITA_CLIENTE");
+        token = jwtUtil.generateToken("admin", authorities, 5);
     }
 
     @Test
     @DisplayName("Deve retornar todos os clientes")
     void clienteFindAll() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/cliente")
+                        .header("Authorization", "Bearer ".concat(token))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content").isNotEmpty())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content.[0].id").value(1))
@@ -58,6 +70,7 @@ class ApiControllerTest {
         clienteRequest.setEndereco("Rua K, 123");
         clienteRequest.setTelefone("53 02938423478");
         mvc.perform(MockMvcRequestBuilders.post("/api/cliente")
+                        .header("Authorization", "Bearer ".concat(token))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(ow.writeValueAsString(clienteRequest))
                 )
@@ -77,6 +90,7 @@ class ApiControllerTest {
         clienteRequest.setEndereco("Rua H, 345");
         clienteRequest.setTelefone("53 020980980987");
         mvc.perform(MockMvcRequestBuilders.put("/api/cliente")
+                        .header("Authorization", "Bearer ".concat(token))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(ow.writeValueAsString(clienteRequest))
                 )
@@ -95,6 +109,7 @@ class ApiControllerTest {
         clienteRequest.setEndereco("Rua H, 345");
         clienteRequest.setTelefone("53 020980980987");
         mvc.perform(MockMvcRequestBuilders.put("/api/cliente")
+                        .header("Authorization", "Bearer ".concat(token))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(ow.writeValueAsString(clienteRequest))
                 )
@@ -106,6 +121,7 @@ class ApiControllerTest {
     @DisplayName("Deve excluir um cliente")
     void delete() throws Exception {
         mvc.perform(MockMvcRequestBuilders.delete("/api/cliente/2")
+                        .header("Authorization", "Bearer ".concat(token))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
@@ -115,6 +131,7 @@ class ApiControllerTest {
     @DisplayName("Deve retornar 404 quando tentar excluir cliente não encontrado")
     void deleteNotFound() throws Exception {
         mvc.perform(MockMvcRequestBuilders.delete("/api/cliente/10")
+                        .header("Authorization", "Bearer ".concat(token))
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -125,6 +142,7 @@ class ApiControllerTest {
     @DisplayName("Deve encontrar um cliente pelo id")
     void findById() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/api/cliente/1")
+                        .header("Authorization", "Bearer ".concat(token))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
                 .andExpect(MockMvcResultMatchers.status().isOk())

@@ -13,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -25,6 +27,7 @@ public class ApiController implements ApiSwagger{
 	@Autowired
 	private ClienteRepository clienteRepository;
 
+	@PreAuthorize("hasAuthority('LEITURA_CLIENTE')")
 	@GetMapping("/cliente")
 	public ResponseEntity<Page<ClienteResponse>> clienteFindAll(@RequestParam(required = false) String nome,
 																@RequestParam(required = false) String endereco,
@@ -40,6 +43,7 @@ public class ApiController implements ApiSwagger{
 		return ResponseEntity.ok(clienteResponseList);
 	}
 
+	@PreAuthorize("hasAuthority('ESCRITA_CLIENTE')")
 	@PostMapping("/cliente")
 	public ResponseEntity<ClienteResponse> insert(@RequestBody ClienteRequest request){
 
@@ -50,6 +54,7 @@ public class ApiController implements ApiSwagger{
 		return new ResponseEntity<>(clienteResponse, HttpStatus.CREATED);
 	}
 
+	@PreAuthorize("hasAuthority('ESCRITA_CLIENTE')")
 	@PutMapping("/cliente")
 	public ResponseEntity<ClienteResponse> update(@RequestBody ClienteRequest request){
 		final var clienteEntity = ObjectMapperUtil.map(request, ClienteEntity.class);
@@ -64,6 +69,7 @@ public class ApiController implements ApiSwagger{
 		return new ResponseEntity<>(clienteResponse, HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasAuthority('ESCRITA_CLIENTE')")
 	@DeleteMapping("/cliente/{id}")
 	public ResponseEntity<MessageResponse> delete(@PathVariable Long id){
 		final var clienteEntityFound = clienteRepository.findById(id);
@@ -84,6 +90,7 @@ public class ApiController implements ApiSwagger{
 				.build(), HttpStatus.OK);
 	}
 
+	@PreAuthorize("hasAuthority('LEITURA_CLIENTE')")
 	@GetMapping("/cliente/{id}")
 	public ResponseEntity<ClienteResponse> findById(@PathVariable Long id){
 		final var clienteEntity = clienteRepository.findById(id);
