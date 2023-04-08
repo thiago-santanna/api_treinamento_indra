@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @RestController
 @RequestMapping(value = "/api")
-public class ApiController{
+public class ApiController implements ApiSwagger{
 
 	@Autowired
 	private ClienteRepository clienteRepository;

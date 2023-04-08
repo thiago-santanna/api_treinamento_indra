@@ -16,3 +16,5 @@ Para executar os testes unitários desse projeto rode
 ```bash
   mvn test
 ```
+Documentação da API
+http://localhost:8053/swagger-ui/index.html
