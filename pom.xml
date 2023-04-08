@@ -9,8 +9,8 @@
 		<version>2.6.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>br.com.petrobras</groupId>
-	<artifactId>evaluation-form</artifactId>
+	<groupId>com.minsait</groupId>
+	<artifactId>curso-ppt-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>evaluation-form</name>
 	<description>Formulário de Avaliação</description>
