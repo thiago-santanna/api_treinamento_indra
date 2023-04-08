@@ -20,3 +20,17 @@ spring:
     show-sql: true
     properties:
       hibernate: org.hibernate.dialect.Oracle10gDialect
+jwt:
+  secret: 3b90d3a6-6a1a-4962-b0ea-a6661235dde4
+security:
+  enabled: false
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+        SQL: DEBUG
