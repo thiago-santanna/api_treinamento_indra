@@ -39,7 +39,7 @@ class AuthControllerTest {
     @DisplayName("Deve gerar um token")
     public void getTokenTest() throws Exception {
         final var request = new GetTokenRequest();
-        request.setUserName("admin");
+        request.setUserName("root");
         request.setPassword("12345");
         mvc.perform(MockMvcRequestBuilders.post("/auth/get-token")
                         .contentType(MediaType.APPLICATION_JSON)
