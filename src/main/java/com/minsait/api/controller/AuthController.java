@@ -2,6 +2,7 @@ package com.minsait.api.controller;
 
 import com.minsait.api.controller.dto.GetTokenRequest;
 import com.minsait.api.controller.dto.GetTokenResponse;
+import com.minsait.api.repository.UsuarioEntity;
 import com.minsait.api.repository.UsuarioRepository;
 import com.minsait.api.sicurity.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +31,22 @@ public class AuthController {
 
     @PostMapping("/get-token")
     public ResponseEntity<GetTokenResponse> getToken(@RequestBody GetTokenRequest request){
-        if(request.getPassword().equals("12345") && request.getUserName().equals("root")){
+
+        UsuarioEntity login = usuarioRepository.findByLogin(request.getUserName());
+        if (login == null){
+            return new ResponseEntity<>(GetTokenResponse.builder().build(), HttpStatus.UNAUTHORIZED);
+        }
+        if(login.getSenha() == null || login.getLogin() == null){
+            return new ResponseEntity<>(GetTokenResponse.builder().build(), HttpStatus.UNAUTHORIZED);
+        }
+
+        if(request.verificaSenha(request.getPassword(), login.getSenha())){
             final ArrayList<String> permissions = new ArrayList<>();
             permissions.add("LEITURA_CLIENTE");
             permissions.add("ESCRITA_CLIENTE");
 
-            final var token =jwtUtil.generateToken("admin", permissions, 5);
+            final var token = jwtUtil.generateToken(login.getLogin(), permissions, Math.toIntExact(login.getId()));
+
             return new ResponseEntity<>(GetTokenResponse.builder()
                     .accessToken(token)
                     .build(), HttpStatus.OK);

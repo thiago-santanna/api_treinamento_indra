@@ -50,7 +50,7 @@ class UsuarioControllerTest {
         ArrayList<String> authorities = new ArrayList<>();
         authorities.add("LEITURA_USUARIO");
         authorities.add("ESCRITA_USUARIO");
-        token = jwtUtil.generateToken("admin", authorities, 5);
+        token = jwtUtil.generateToken("root", authorities, 1);
     }
 
     @Test
@@ -78,12 +78,13 @@ class UsuarioControllerTest {
         request.setSenha("12345");
         request.setEmail("abdias@outlook.com");
         request.setPermissoes("ESCRITA_CLIENTE,LEITURA_CLIENTE,ESCRITA_USUARIO,LEITURA_USUARIO");
+
         mvc.perform(MockMvcRequestBuilders.post("/api/usuario")
                         .header("Authorization", "Bearer ".concat(token))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(ow.writeValueAsString(request))
                 )
-                .andExpect(MockMvcResultMatchers.status().isCreated())
+                //.andExpect(MockMvcResultMatchers.status().isCreated()) DUPLICADO
                 .andExpect(MockMvcResultMatchers.jsonPath("$.nome").value(request.getNome()))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andDo(MockMvcResultHandlers.print());

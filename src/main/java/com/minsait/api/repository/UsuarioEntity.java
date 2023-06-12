@@ -1,9 +1,11 @@
 package com.minsait.api.repository;
 
+import com.minsait.api.controller.dto.UsuarioRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.persistence.criteria.Predicate;
@@ -37,4 +39,15 @@ public class UsuarioEntity {
 
     @Column(name = "PERMISSOES")
     private String permissoes;
+
+    public void encryptPassword() {
+        this.senha = new BCryptPasswordEncoder().encode(this.senha);
+    }
+
+    public void atualizaDados(UsuarioRequest request){
+        this.setNome(request.getNome());
+        this.setLogin(request.getLogin());
+        this.setEmail(request.getEmail());
+        this.setPermissoes(request.getPermissoes());
+    }
 }

@@ -23,7 +23,7 @@ spring:
 jwt:
   secret: 3b90d3a6-6a1a-4962-b0ea-a6661235dde4
 security:
-  enabled: false
+  enabled: true
 
 logging:
   level:
