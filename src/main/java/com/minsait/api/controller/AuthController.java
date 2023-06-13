@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(value = "/auth")
 public class AuthController {
+
+    private final String SEPARADOR_PERMISSOES = ",";
 
     @Autowired
     UsuarioRepository usuarioRepository;
@@ -42,10 +42,9 @@ public class AuthController {
 
         if(request.verificaSenha(request.getPassword(), login.getSenha())){
             final ArrayList<String> permissions = new ArrayList<>();
-            permissions.add(login.getPermissoes());
-
+            String[] strings = login.getPermissoes().split(SEPARADOR_PERMISSOES);
+            Collections.addAll(permissions, strings);
             final var token = jwtUtil.generateToken(login.getLogin(), permissions, Math.toIntExact(login.getId()));
-
             return new ResponseEntity<>(GetTokenResponse.builder()
                     .accessToken(token)
                     .build(), HttpStatus.OK);

@@ -52,6 +52,7 @@ public class UsuarioEntity {
 
         if (request.getSenha() != null) {
             this.setSenha(request.getSenha());
+            this.encryptPassword();
         }
     }
 }
