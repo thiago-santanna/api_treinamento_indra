@@ -49,5 +49,9 @@ public class UsuarioEntity {
         this.setLogin(request.getLogin());
         this.setEmail(request.getEmail());
         this.setPermissoes(request.getPermissoes());
+
+        if (request.getSenha() != null) {
+            this.setSenha(request.getSenha());
+        }
     }
 }

@@ -42,8 +42,7 @@ public class AuthController {
 
         if(request.verificaSenha(request.getPassword(), login.getSenha())){
             final ArrayList<String> permissions = new ArrayList<>();
-            permissions.add("LEITURA_CLIENTE");
-            permissions.add("ESCRITA_CLIENTE");
+            permissions.add(login.getPermissoes());
 
             final var token = jwtUtil.generateToken(login.getLogin(), permissions, Math.toIntExact(login.getId()));
 
