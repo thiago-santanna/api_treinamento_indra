@@ -35,7 +35,9 @@ http://localhost:8053/swagger-ui/index.html
   Método para comparar a senha:
   BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
   encoder.matches(request.getPassword(), usuarioEncontrado.getSenha())
-  o método acima retorna true se a senha tiver correta e false se a senha estiver errada
+  o método acima retorna true se a senha tiver correta e false se a senha estiver errada.
+- A senha do usuário deve ser criptografada antes de ser salva. Para criptografar a senha faça encoder.encode("12345"); Esse método retorna uma string com a senha criptografada
+- Lembrando de encoder é uma instância de BCryptPasswordEncoder
 
 - Criar endpoints para manter usuários
   [GET] /api/usuario Retorna todos os usuários com paginação | permissão: LEITURA_USUARIO
